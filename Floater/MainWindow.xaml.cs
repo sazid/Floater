@@ -23,6 +23,23 @@ namespace Floater
         public MainWindow()
         {
             InitializeComponent();
+            MainBrowser.LoadingStateChanged += MainBrowser_LoadingStateChanged;
+        }
+
+        private void MainBrowser_LoadingStateChanged(object sender, CefSharp.LoadingStateChangedEventArgs e)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                try
+                {
+                    urlTextbox.Text = MainBrowser.Address;
+                }
+                catch (Exception exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+            });
+            
         }
 
         private void urlTextbox_KeyDown(object sender, KeyEventArgs e)
@@ -31,6 +48,11 @@ namespace Floater
             {
                 MainBrowser.Address = urlTextbox.Text;
             }
+        }
+
+        private void backButton_Click(object sender, RoutedEventArgs e)
+        {
+            //if (MainBrowser.CanGoBack)
         }
     }
 }

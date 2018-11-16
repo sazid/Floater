@@ -12,19 +12,27 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="28px"/>
             <ColumnDefinition Width="28px"/>
-            <ColumnDefinition Width="28px"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="28px"/>
+            <RowDefinition Height="2"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
-        <Button Grid.Row="0" Grid.Column="0" x:Name="backButton" Content="◀" HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28"/>
-        <Button Grid.Row="0" Grid.Column="1" x:Name="forwardButton" Content="▶" HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28"/>
-        <Button Grid.Row="0" Grid.Column="2" x:Name="reloadButton" Content="↺" HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28"/>
-        <TextBox Grid.Row="0" Grid.Column="3" x:Name="urlTextbox" Height="28" TextWrapping="NoWrap" Padding="6" MaxLines="1" MinLines="1" Text="https://sazid.github.io/" VerticalAlignment="Top" BorderThickness="0,0,0,1" KeyDown="urlTextbox_KeyDown" />
 
-        <cefSharp:ChromiumWebBrowser Name="MainBrowser" Grid.Column="0" Address="https://sazid.github.io/" Grid.ColumnSpan="4" Grid.Row="1" />
+        <Button Grid.Row="0" Grid.Column="0" x:Name="backButton" Command="{Binding WebBrowser.BackCommand, ElementName=MainBrowser}" Content="◀" HorizontalAlignment="Right" VerticalAlignment="Top" Width="28" Height="28" Click="backButton_Click"/>
+        <Button Grid.Row="0" Grid.Column="1" x:Name="forwardButton" Command="{Binding WebBrowser.ForwardCommand, ElementName=MainBrowser}" Content="▶" HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28"/>
+        <TextBox Grid.Row="0" Grid.Column="2" x:Name="urlTextbox" Height="28" TextWrapping="NoWrap" Padding="5" MaxLines="1" MinLines="1" VerticalAlignment="Top" KeyDown="urlTextbox_KeyDown" BorderBrush="Gray" BorderThickness="1" />
+
+        <ProgressBar IsIndeterminate="{Binding IsLoading, ElementName=MainBrowser}"
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Top"
+                     Width="Auto"
+                     Grid.Row="1"
+                     Grid.ColumnSpan="3"
+                     Height="2"
+                     BorderThickness="0" />
+
+        <cefSharp:ChromiumWebBrowser Name="MainBrowser" Grid.Column="0" Address="https://sazid.github.io/" Grid.ColumnSpan="3" Grid.Row="2" />
     </Grid>
 </Window>
