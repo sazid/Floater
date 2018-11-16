@@ -24,5 +24,13 @@ namespace Floater
         {
             InitializeComponent();
         }
+
+        private void urlTextbox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                MainBrowser.Address = urlTextbox.Text;
+            }
+        }
     }
 }
