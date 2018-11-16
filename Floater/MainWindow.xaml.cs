@@ -23,7 +23,6 @@ namespace Floater
         public MainWindow()
         {
             InitializeComponent();
-            MainBrowser.Navigate("https://google.com/");
         }
     }
 }
