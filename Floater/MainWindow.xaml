@@ -6,8 +6,25 @@
         xmlns:cefSharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
         xmlns:local="clr-namespace:Floater"
         mc:Ignorable="d"
+        Topmost="True"
         Title="Floater" Height="450" Width="800">
     <Grid>
-        <cefSharp:ChromiumWebBrowser Grid.Row="0" Grid.Column="0" Address="https://google.com" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="28px"/>
+            <ColumnDefinition Width="28px"/>
+            <ColumnDefinition Width="28px"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="28px"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <Button Grid.Row="0" Grid.Column="0" x:Name="button" Content="◀" HorizontalAlignment="Left" VerticalAlignment="Top" Width="26" Height="28"/>
+        <Button Grid.Row="0" Grid.Column="1" x:Name="button_Copy" Content="▶" HorizontalAlignment="Left" VerticalAlignment="Top" Width="26" Height="28"/>
+        <Button Grid.Row="0" Grid.Column="2" x:Name="button_Copy1" Content="↺" HorizontalAlignment="Left" VerticalAlignment="Top" Width="26" Height="28"/>
+        <TextBox Grid.Row="0" Grid.Column="3" x:Name="textBox" Height="28" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" />
+
+        <cefSharp:ChromiumWebBrowser Name="MainBrowser" Grid.Column="0" Address="https://sazid.github.io/" Grid.ColumnSpan="4" Grid.Row="1" />
     </Grid>
 </Window>
