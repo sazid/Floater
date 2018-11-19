@@ -13,7 +13,7 @@
         BorderBrush="SlateGray"
         BorderThickness="1"
         Title="Floater" Height="450" Width="800">
-    <Grid>
+    <Grid x:Name="content_pane">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="28px"/>
             <ColumnDefinition Width="28px"/>
@@ -29,7 +29,7 @@
         </Grid.RowDefinitions>
         
         <!-- First row -->
-        <Label x:Name="titleLabel" Content="Title of page" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Cursor="SizeAll" />
+        <Label x:Name="titleLabel" Content="Title of page" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Cursor="SizeAll" MouseLeftButtonDown="titleLabel_MouseLeftButtonDown" />
         <Button x:Name="closeButton" Grid.Row="0" Grid.Column="4" FontWeight="Bold" Foreground="White" Background="Red" Content="X" HorizontalAlignment="Left" VerticalAlignment="Top" Width="48" Height="28" Click="closeButton_Click"/>
         <Slider x:Name="opacitySlider" Grid.Row="0" Grid.Column="3" Margin="5" />
 
