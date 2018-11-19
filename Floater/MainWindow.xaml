@@ -7,32 +7,48 @@
         xmlns:local="clr-namespace:Floater"
         mc:Ignorable="d"
         Topmost="True"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="White"
+        BorderBrush="SlateGray"
+        BorderThickness="1"
         Title="Floater" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="28px"/>
             <ColumnDefinition Width="28px"/>
+            <ColumnDefinition Width="450px"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="48px"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="28px"/>
             <RowDefinition Height="28px"/>
             <RowDefinition Height="2"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        
+        <!-- First row -->
+        <Label x:Name="titleLabel" Content="Title of page" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Cursor="SizeAll" />
+        <Button x:Name="closeButton" Grid.Row="0" Grid.Column="4" FontWeight="Bold" Foreground="White" Background="Red" Content="X" HorizontalAlignment="Left" VerticalAlignment="Top" Width="48" Height="28" Click="closeButton_Click"/>
+        <Slider x:Name="opacitySlider" Grid.Row="0" Grid.Column="3" Margin="5" />
 
-        <Button Grid.Row="0" Grid.Column="0" x:Name="backButton" Command="{Binding WebBrowser.BackCommand, ElementName=MainBrowser}" Content="◀" HorizontalAlignment="Right" VerticalAlignment="Top" Width="28" Height="28" Click="backButton_Click"/>
-        <Button Grid.Row="0" Grid.Column="1" x:Name="forwardButton" Command="{Binding WebBrowser.ForwardCommand, ElementName=MainBrowser}" Content="▶" HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28"/>
-        <TextBox Grid.Row="0" Grid.Column="2" x:Name="urlTextbox" Height="28" TextWrapping="NoWrap" Padding="5" MaxLines="1" MinLines="1" VerticalAlignment="Top" KeyDown="urlTextbox_KeyDown" BorderBrush="Gray" BorderThickness="1" />
+        <!-- Second row -->
+        <Button Grid.Row="1" Grid.Column="0" x:Name="backButton" Command="{Binding WebBrowser.BackCommand, ElementName=MainBrowser}" Content="◀" HorizontalAlignment="Right" VerticalAlignment="Top" Width="28" Height="28" Click="backButton_Click"/>
+        <Button Grid.Row="1" Grid.Column="1" x:Name="forwardButton" Command="{Binding WebBrowser.ForwardCommand, ElementName=MainBrowser}" Content="▶" HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28"/>
+        <TextBox Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" x:Name="urlTextbox" Height="28" TextWrapping="NoWrap" Padding="5" MaxLines="1" MinLines="1" VerticalAlignment="Top" KeyDown="urlTextbox_KeyDown" BorderBrush="Gray" BorderThickness="1" />
 
+        <!-- Third row -->
         <ProgressBar IsIndeterminate="{Binding IsLoading, ElementName=MainBrowser}"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Top"
                      Width="Auto"
-                     Grid.Row="1"
-                     Grid.ColumnSpan="3"
+                     Grid.Row="2"
+                     Grid.ColumnSpan="5"
                      Height="2"
                      BorderThickness="0" />
 
-        <cefSharp:ChromiumWebBrowser Name="MainBrowser" Grid.Column="0" Address="https://sazid.github.io/" Grid.ColumnSpan="3" Grid.Row="2" />
+        <!-- Fourth row -->
+        <cefSharp:ChromiumWebBrowser Name="MainBrowser" Grid.Column="0" Address="https://sazid.github.io/" Grid.ColumnSpan="5" Grid.Row="3" />
     </Grid>
 </Window>

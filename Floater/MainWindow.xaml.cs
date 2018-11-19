@@ -24,7 +24,16 @@ namespace Floater
         {
             InitializeComponent();
             MainBrowser.LoadingStateChanged += MainBrowser_LoadingStateChanged;
+
+            //Opacity = 0.8;
         }
+
+        //private void TextBlock_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    var move = content_pane as System.Windows.Controls.StackPanel;
+        //    var win = Window.GetWindow(move);
+        //    win.DragMove();
+        //}
 
         private void MainBrowser_LoadingStateChanged(object sender, CefSharp.LoadingStateChangedEventArgs e)
         {
@@ -54,5 +63,11 @@ namespace Floater
         {
             //if (MainBrowser.CanGoBack)
         }
+
+        private void closeButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
+
 }
