@@ -69,6 +69,11 @@ namespace Floater
             var win = GetWindow(move);
             win.DragMove();
         }
+
+        private void opacitySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Opacity = e.NewValue;
+        }
     }
 
 }
