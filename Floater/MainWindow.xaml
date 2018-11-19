@@ -13,33 +13,71 @@
         BorderBrush="SlateGray"
         BorderThickness="1"
         Title="Floater" Height="768" Width="1024">
-    <Grid x:Name="content_pane" Margin="0">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="28px"/>
-            <ColumnDefinition Width="28px"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="250px"/>
-            <ColumnDefinition Width="48px"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="28px"/>
-            <RowDefinition Height="28px"/>
-            <RowDefinition Height="2"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        
-        <!-- First row -->
-        <Label x:Name="titleLabel" Content="Title of page" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Cursor="SizeAll" MouseLeftButtonDown="titleLabel_MouseLeftButtonDown" />
-        <Slider x:Name="opacitySlider" Grid.Row="0" Grid.Column="3" Margin="5" ValueChanged="opacitySlider_ValueChanged" Maximum="1.0" Minimum="0.5" Value="1.0" />
-        <Button x:Name="closeButton" Grid.Row="0" Grid.Column="4" BorderBrush="Red" FontWeight="Bold" Foreground="White" Background="Red" Content="X" HorizontalAlignment="Left" VerticalAlignment="Top" Width="48" Height="28" Click="closeButton_Click"/>
 
-        <!-- Second row -->
-        <Button Grid.Row="1" Grid.Column="0" x:Name="backButton" Command="{Binding WebBrowser.BackCommand, ElementName=MainBrowser}" Content="◀" HorizontalAlignment="Right" VerticalAlignment="Top" Width="28" Height="28" Click="backButton_Click"/>
-        <Button Grid.Row="1" Grid.Column="1" x:Name="forwardButton" Command="{Binding WebBrowser.ForwardCommand, ElementName=MainBrowser}" Content="▶" HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28"/>
-        <TextBox Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" x:Name="urlTextbox" Height="28" TextWrapping="NoWrap" Padding="5" MaxLines="1" MinLines="1" VerticalAlignment="Top" KeyDown="urlTextbox_KeyDown" BorderBrush="Gray" BorderThickness="1" />
+    <Window.Resources>
+        <Style x:Key="RectBorderStyle" TargetType="Rectangle">
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="Fill" Value="Transparent" />
+            <Setter Property="Tag" Value="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
+            <EventSetter Event="MouseLeftButtonDown" Handler="Resize_Init"/>
+            <EventSetter Event="MouseLeftButtonUp" Handler="Resize_End"/>
+            <EventSetter Event="MouseMove" Handler="Resizeing_Form"/>
+        </Style>
+    </Window.Resources>
 
-        <!-- Third row -->
-        <ProgressBar IsIndeterminate="{Binding IsLoading, ElementName=MainBrowser}"
+    <DockPanel>
+        <Rectangle x:Name="leftSizeGrip"
+            DockPanel.Dock="Left"
+            Width="5"
+            HorizontalAlignment="Left"
+            Cursor="SizeWE"
+            Style="{StaticResource RectBorderStyle}" />
+        <Rectangle x:Name="topSizeGrip"
+            DockPanel.Dock="Top"
+            Height="5"
+            VerticalAlignment="Top"
+            Cursor="SizeNS"
+            Style="{StaticResource RectBorderStyle}" />
+        <Rectangle x:Name="rightSizeGrip"
+            DockPanel.Dock="Right"
+            Width="5"
+            HorizontalAlignment="Right"
+            Cursor="SizeWE"
+            Style="{StaticResource RectBorderStyle}" />
+        <Rectangle x:Name="bottomSizeGrip"
+            DockPanel.Dock="Bottom"
+            Height="5"
+            VerticalAlignment="Bottom"
+            Cursor="SizeNS"
+            Style="{StaticResource RectBorderStyle}" />
+
+        <Grid x:Name="content_pane" DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="28px"/>
+                <ColumnDefinition Width="28px"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="250px"/>
+                <ColumnDefinition Width="48px"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="28px"/>
+                <RowDefinition Height="28px"/>
+                <RowDefinition Height="2"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- First row -->
+            <Label x:Name="titleLabel" Content="Title of page" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Cursor="SizeAll" MouseLeftButtonDown="titleLabel_MouseLeftButtonDown" />
+            <Slider x:Name="opacitySlider" Grid.Row="0" Grid.Column="3" Margin="5" ValueChanged="opacitySlider_ValueChanged" Maximum="1.0" Minimum="0.5" Value="1.0" />
+            <Button x:Name="closeButton" Grid.Row="0" Grid.Column="4" BorderBrush="Red" FontWeight="Bold" Foreground="White" Background="Red" Content="X" HorizontalAlignment="Left" VerticalAlignment="Top" Width="48" Height="28" Click="closeButton_Click"/>
+
+            <!-- Second row -->
+            <Button Grid.Row="1" Grid.Column="0" x:Name="backButton" Command="{Binding WebBrowser.BackCommand, ElementName=MainBrowser}" Content="◀" HorizontalAlignment="Right" VerticalAlignment="Top" Width="28" Height="28" Click="backButton_Click"/>
+            <Button Grid.Row="1" Grid.Column="1" x:Name="forwardButton" Command="{Binding WebBrowser.ForwardCommand, ElementName=MainBrowser}" Content="▶" HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28"/>
+            <TextBox Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" x:Name="urlTextbox" Height="28" TextWrapping="NoWrap" Padding="5" MaxLines="1" MinLines="1" VerticalAlignment="Top" KeyDown="urlTextbox_KeyDown" BorderBrush="Gray" BorderThickness="1" />
+
+            <!-- Third row -->
+            <ProgressBar IsIndeterminate="{Binding IsLoading, ElementName=MainBrowser}"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Top"
                      Width="Auto"
@@ -48,7 +86,8 @@
                      Height="2"
                      BorderThickness="0" />
 
-        <!-- Fourth row -->
-        <cefSharp:ChromiumWebBrowser Name="MainBrowser" Grid.Column="0" Address="https://sazid.github.io/" Grid.ColumnSpan="5" Grid.Row="3" />
-    </Grid>
+            <!-- Fourth row -->
+            <cefSharp:ChromiumWebBrowser Name="MainBrowser" Grid.Column="0" Address="https://sazid.github.io/" Grid.ColumnSpan="5" Grid.Row="3" />
+        </Grid>
+    </DockPanel>
 </Window>
