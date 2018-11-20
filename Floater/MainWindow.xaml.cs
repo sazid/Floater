@@ -1,5 +1,7 @@
-﻿using System;
+﻿using CefSharp;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,17 +25,16 @@ namespace Floater
         public MainWindow()
         {
             InitializeComponent();
-            MainBrowser.LoadingStateChanged += MainBrowser_LoadingStateChanged;
 
-            //Opacity = 0.8;
+            MainBrowser.LoadingStateChanged += MainBrowser_LoadingStateChanged;
+            //MainBrowser.DownloadHandler = new DownloadHandler();
         }
 
         #region ResizeWindows
         bool ResizeInProcess = false;
         private void Resize_Init(object sender, MouseButtonEventArgs e)
         {
-            Rectangle senderRect = sender as Rectangle;
-            if (senderRect != null)
+            if (sender is Rectangle senderRect)
             {
                 ResizeInProcess = true;
                 senderRect.CaptureMouse();
@@ -42,8 +43,7 @@ namespace Floater
 
         private void Resize_End(object sender, MouseButtonEventArgs e)
         {
-            Rectangle senderRect = sender as Rectangle;
-            if (senderRect != null)
+            if (sender is Rectangle senderRect)
             {
                 ResizeInProcess = false; ;
                 senderRect.ReleaseMouseCapture();
@@ -121,11 +121,6 @@ namespace Floater
             {
                 MainBrowser.Address = urlTextbox.Text;
             }
-        }
-
-        private void backButton_Click(object sender, RoutedEventArgs e)
-        {
-            //if (MainBrowser.CanGoBack)
         }
 
         private void closeButton_Click(object sender, RoutedEventArgs e)
