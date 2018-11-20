@@ -148,7 +148,7 @@ namespace Floater
 
         private void ShowUIElements()
         {
-            content_pane.RowDefinitions[0].Height = new GridLength(28);
+            content_pane.RowDefinitions[0].Height = new GridLength(32);
             content_pane.RowDefinitions[1].Height = new GridLength(28);
         }
 

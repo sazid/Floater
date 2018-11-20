@@ -11,7 +11,7 @@
         AllowsTransparency="True"
         Background="White"
         BorderBrush="SlateGray"
-        BorderThickness="1"
+        BorderThickness="2"
         Title="Floater" Height="768" Width="1024" Activated="Window_Activated" Deactivated="Window_Deactivated">
 
     <Window.Resources>
@@ -22,11 +22,6 @@
             <EventSetter Event="MouseLeftButtonDown" Handler="Resize_Init"/>
             <EventSetter Event="MouseLeftButtonUp" Handler="Resize_End"/>
             <EventSetter Event="MouseMove" Handler="Resizeing_Form"/>
-        </Style>
-
-        <!-- Controls the visibility of all the controls -->
-        <Style x:Key="UIElementStyle" TargetType="Control">
-            <Setter Property="Visibility" Value="Visible" />
         </Style>
     </Window.Resources>
 
@@ -64,25 +59,25 @@
                 <ColumnDefinition Width="28px"/>
                 <ColumnDefinition Width="28px"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="250px"/>
+                <ColumnDefinition Width="150px"/>
                 <ColumnDefinition Width="48px"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="28px"/>
+                <RowDefinition Height="32px"/>
                 <RowDefinition Height="28px"/>
                 <RowDefinition Height="2"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <!-- First row -->
-            <Label Name="titleLabel" Style="{StaticResource UIElementStyle}" Content="Title of page" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Cursor="SizeAll" MouseLeftButtonDown="titleLabel_MouseLeftButtonDown" />
-            <Slider Name="opacitySlider" Style="{StaticResource UIElementStyle}" Grid.Row="0" Grid.Column="3" Margin="15,5" ValueChanged="opacitySlider_ValueChanged" Maximum="1.0" Minimum="0.5" Value="1.0" />
-            <Button Name="closeButton" Style="{StaticResource UIElementStyle}" Grid.Row="0" Grid.Column="4" BorderBrush="Red" FontWeight="Bold" Foreground="White" Background="Red" Content="X" HorizontalAlignment="Left" VerticalAlignment="Top" Width="48" Height="28" Click="closeButton_Click"/>
+            <Label Name="titleLabel" Content="Title of page" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Cursor="SizeAll" MouseLeftButtonDown="titleLabel_MouseLeftButtonDown" />
+            <Slider Name="opacitySlider" Grid.Row="0" Grid.Column="3" Margin="15,5" ValueChanged="opacitySlider_ValueChanged" Maximum="1.0" Minimum="0.5" Value="1.0" />
+            <Button Name="closeButton" Grid.Row="0" Grid.Column="4" BorderBrush="Red" FontWeight="Bold" Foreground="White" Background="Red" Content="X" HorizontalAlignment="Left" VerticalAlignment="Top" Width="48" Height="28" Click="closeButton_Click"/>
 
             <!-- Second row -->
-            <Button Grid.Row="1" Grid.Column="0" Name="backButton" Style="{StaticResource UIElementStyle}" Command="{Binding WebBrowser.BackCommand, ElementName=MainBrowser}" Content="◀" HorizontalAlignment="Right" VerticalAlignment="Top" Width="28" Height="28"/>
-            <Button Grid.Row="1" Grid.Column="1" Name="forwardButton" Style="{StaticResource UIElementStyle}" Command="{Binding WebBrowser.ForwardCommand, ElementName=MainBrowser}" Content="▶" HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28"/>
-            <TextBox Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" Style="{StaticResource UIElementStyle}" Name="urlTextbox" Height="28" TextWrapping="NoWrap" Padding="5" MaxLines="1" MinLines="1" VerticalAlignment="Top" KeyDown="urlTextbox_KeyDown" BorderBrush="Gray" BorderThickness="1" />
+            <Button Grid.Row="1" Grid.Column="0" Name="backButton" Command="{Binding WebBrowser.BackCommand, ElementName=MainBrowser}" Content="◀" HorizontalAlignment="Right" VerticalAlignment="Top" Width="28" Height="28"/>
+            <Button Grid.Row="1" Grid.Column="1" Name="forwardButton" Command="{Binding WebBrowser.ForwardCommand, ElementName=MainBrowser}" Content="▶" HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28"/>
+            <TextBox Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" Name="urlTextbox" Height="28" TextWrapping="NoWrap" Padding="5" MaxLines="1" MinLines="1" VerticalAlignment="Top" KeyDown="urlTextbox_KeyDown" BorderBrush="Gray" BorderThickness="1" />
 
             <!-- Third row -->
             <ProgressBar IsIndeterminate="{Binding IsLoading, ElementName=MainBrowser}"
@@ -92,7 +87,6 @@
                      Grid.Row="2"
                      Grid.ColumnSpan="5"
                      Height="2"
-                     Style="{StaticResource UIElementStyle}"
                      BorderThickness="0" />
 
             <!-- Fourth row -->
