@@ -27,8 +27,7 @@ namespace Floater
 
             MainBrowser.LoadingStateChanged += MainBrowser_LoadingStateChanged;
             MainBrowser.MenuHandler = new MenuHandler();
-
-            //settings.CefCommandLineArgs.Add("disable-gpu", "");
+            
             //MainBrowser.DownloadHandler = new DownloadHandler();
         }
 
@@ -122,7 +121,7 @@ namespace Floater
         }
         #endregion
 
-        private void MainBrowser_LoadingStateChanged(object sender, CefSharp.LoadingStateChangedEventArgs e)
+        private void MainBrowser_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
         {
             this.Dispatcher.Invoke(() =>
             {
@@ -130,6 +129,11 @@ namespace Floater
                 {
                     urlTextbox.Text = MainBrowser.Address;
                     titleLabel.Content = MainBrowser.Title;
+
+                    //if (IsUrlYoutubeVideo(MainBrowser.Address))
+                    //{
+                    //    LoadYoutubeMode(MainBrowser.Address)
+                    //}
                 }
                 catch (Exception exc)
                 {
@@ -137,6 +141,59 @@ namespace Floater
                 }
             });
             
+        }
+
+        private bool IsUrlYoutubeVideo(string url)
+        {
+            if (url.StartsWith("https://www.youtube.com/watch?v="))
+                return true;
+            return false;
+        }
+
+        private void LoadYoutubeMode(string url)
+        {
+            MainBrowser.LoadHtml(@"
+<!DOCTYPE html>
+<html>
+<body>
+
+<div id='player'></div>
+
+ <script>
+      // 2. This code loads the IFrame Player API code asynchronously.
+      var tag = document.createElement('script');
+
+      tag.src = 'https://www.youtube.com/iframe_api';
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+            // 3. This function creates an <iframe> (and YouTube player)
+            //    after the API code downloads.
+            var player;
+            function onYouTubeIframeAPIReady()
+            {
+                player = new YT.Player('player', {
+          height: '390',
+          width: '640',
+          videoId: 'M7lc1UVf-VE',
+          events:
+            {
+                'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      }
+
+    // 4. The API will call this function when the video player is ready.
+    function onPlayerReady(event)
+    {
+        event.target.playVideo();
+    }
+    </script>
+
+</body>
+</html>
+            ");
         }
 
         private void urlTextbox_KeyDown(object sender, KeyEventArgs e)
