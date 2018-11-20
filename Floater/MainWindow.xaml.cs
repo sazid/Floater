@@ -1,18 +1,16 @@
-﻿using CefSharp;
+﻿/**
+ * Floater: A minimalistic floating web browser with cool superpowers :p
+ * Copyright (c) Mohammed Sazid Al Rashid
+ * https://github.com/sazid/
+ * https://linkedin.com/in/sazidz/
+ */
+
+using CefSharp;
+using CefSharp.Wpf;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Floater
@@ -24,10 +22,36 @@ namespace Floater
     {
         public MainWindow()
         {
+            InitializeCEFSettings();
             InitializeComponent();
 
             MainBrowser.LoadingStateChanged += MainBrowser_LoadingStateChanged;
+            MainBrowser.MenuHandler = new MenuHandler();
+
+            //settings.CefCommandLineArgs.Add("disable-gpu", "");
             //MainBrowser.DownloadHandler = new DownloadHandler();
+        }
+
+        private void InitializeCEFSettings()
+        {
+            CefSettings settings = new CefSettings
+            {
+                CachePath = "cache"  //always set the cachePath, else this wont work
+            };
+
+            //settings.SetOffScreenRenderingBestPerformanceArgs();
+            settings.CefCommandLineArgs.Add("disable-gpu", "1");
+            settings.CefCommandLineArgs.Add("disable-gpu-compositing", "1");
+            settings.CefCommandLineArgs.Add("enable-begin-frame-scheduling", "1");
+            //settings.CefCommandLineArgs.Add("disable-gpu-vsync", "1");
+            settings.CefCommandLineArgs.Add("enable-media-stream", "1"); //Enable WebRTC
+            settings.CefCommandLineArgs.Add("no-proxy-server", "1"); //Don't use a proxy server, always make direct connections. Overrides any other proxy server flags that are passed.
+            settings.CefCommandLineArgs.Add("disable-plugins-discovery", "1"); //Disable discovering third-party plugins. Effectively loading only ones shipped with the browser plus third-party ones as specified by --extra-plugin-dir and --load-plugin switches
+
+
+            //add an if statement to initialize the settings once. else the app is going to crash
+            if (Cef.IsInitialized == false)
+                Cef.Initialize(settings);
         }
 
         #region ResizeWindows
@@ -160,6 +184,61 @@ namespace Floater
         private void Window_Deactivated(object sender, EventArgs e)
         {
             HideUiElements();
+        }
+
+        class MenuHandler : IContextMenuHandler
+        {
+            //private const int ShowDevTools = 26501;
+            private const int GoBack = 26502;
+            private const int GoForward = 26503;
+            private const int Reload = 26504;
+
+            void IContextMenuHandler.OnBeforeContextMenu(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, IMenuModel model)
+            {
+                //To disable the menu then call clear
+                model.Clear();
+
+                //Removing existing menu item
+                //bool removed = model.Remove(CefMenuCommand.ViewSource); // Remove "View Source" option
+
+                //Add new custom menu items
+                //model.AddItem((CefMenuCommand)ShowDevTools, "Show DevTools");
+                model.AddItem((CefMenuCommand)GoBack, "Back");
+                model.AddItem((CefMenuCommand)GoForward, "Forward");
+                model.AddItem((CefMenuCommand)Reload, "Reload");
+            }
+
+            bool IContextMenuHandler.OnContextMenuCommand(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, CefMenuCommand commandId, CefEventFlags eventFlags)
+            {
+                switch ((int)commandId)
+                {
+                    //case ShowDevTools:
+                    //    browser.ShowDevTools();
+                    //    break;
+                    case GoBack:
+                        if (browser.CanGoBack)
+                            browser.GoBack();
+                        break;
+                    case GoForward:
+                        if (browser.CanGoForward)
+                            browser.GoForward();
+                        break;
+                    case Reload:
+                        browser.Reload();
+                        break;
+                }
+                return false;
+            }
+
+            void IContextMenuHandler.OnContextMenuDismissed(IWebBrowser browserControl, IBrowser browser, IFrame frame)
+            {
+
+            }
+
+            bool IContextMenuHandler.RunContextMenu(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, IMenuModel model, IRunContextMenuCallback callback)
+            {
+                return false;
+            }
         }
     }
 
