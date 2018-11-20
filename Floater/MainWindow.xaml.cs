@@ -139,6 +139,28 @@ namespace Floater
         {
             Opacity = e.NewValue;
         }
+
+        private void HideUiElements()
+        {
+            content_pane.RowDefinitions[0].Height = new GridLength(0);
+            content_pane.RowDefinitions[1].Height = new GridLength(0);
+        }
+
+        private void ShowUIElements()
+        {
+            content_pane.RowDefinitions[0].Height = new GridLength(28);
+            content_pane.RowDefinitions[1].Height = new GridLength(28);
+        }
+
+        private void Window_Activated(object sender, EventArgs e)
+        {
+            ShowUIElements();
+        }
+
+        private void Window_Deactivated(object sender, EventArgs e)
+        {
+            HideUiElements();
+        }
     }
 
 }
