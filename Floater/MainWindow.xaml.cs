@@ -256,7 +256,14 @@ namespace Floater
 
         private void ScreenRecordMenuItem_Click(object sender, RoutedEventArgs e)
         {
-
+            try
+            {
+                System.Diagnostics.Process.Start(@"captura\captura.exe");
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Error. Screen recorder not found");
+            }
         }
 
         private void ReloadMenuItem_Click(object sender, RoutedEventArgs e) => MainBrowser.Reload();
