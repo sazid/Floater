@@ -72,7 +72,13 @@
                 <Button DockPanel.Dock="Left" Command="{Binding WebBrowser.ForwardCommand, ElementName=MainBrowser}" Content="▶" HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28" Background="{x:Null}" BorderBrush="{x:Null}"/>
                 <Menu DockPanel.Dock="Left" Margin="6" Background="{x:Null}">
                     <MenuItem Header="MENU">
-                        <MenuItem Header="MenuItem1"/>
+                        <CheckBox Name="FloatCheckBox" Content="FLoat" IsChecked="True" Click="FloatCheckBox_Click" />
+                        <CheckBox Name="HideUiCheckBox" Content="Hide UI on Lost Focus" IsChecked="False" />
+                        <MenuItem Name="YoutubeModeMenuItem" Header="YouTube video mode" Click="YoutubeModeMenuItem_Click"/>
+                        <MenuItem Name="ReloadMenuItem" Header="Reload" Click="ReloadMenuItem_Click"/>
+                        <MenuItem Name="HistoryMenuItem" Header="History" Click="HistoryMenuItem_Click"/>
+                        <MenuItem Name="ScreenRecordMenuItem" Header="Screen Record" Click="ScreenRecordMenuItem_Click"/>
+                        <MenuItem Name="AboutMenuItem" Header="About" Click="AboutMenuItem_Click"/>
                     </MenuItem>
                 </Menu>
                 <!--<Label DockPanel.Dock="Left" Name="titleLabel" Padding="7" Content="Title of page" Cursor="SizeAll" />-->

@@ -27,7 +27,6 @@ namespace Floater
 
             MainBrowser.LoadingStateChanged += MainBrowser_LoadingStateChanged;
             MainBrowser.MenuHandler = new MenuHandler();
-            
             //MainBrowser.DownloadHandler = new DownloadHandler();
         }
 
@@ -130,10 +129,10 @@ namespace Floater
                     urlTextbox.Text = MainBrowser.Address;
                     //titleLabel.Content = MainBrowser.Title;
 
-                    //if (IsUrlYoutubeVideo(MainBrowser.Address))
-                    //{
-                    //    LoadYoutubeMode(MainBrowser.Address)
-                    //}
+                    if (IsUrlYoutubeVideo(MainBrowser.Address))
+                        YoutubeModeMenuItem.IsEnabled = true;
+                    else
+                        YoutubeModeMenuItem.IsEnabled = false;
                 }
                 catch (Exception exc)
                 {
@@ -152,48 +151,33 @@ namespace Floater
 
         private void LoadYoutubeMode(string url)
         {
-            MainBrowser.LoadHtml(@"
+            // convert url to youtube embed
+            url = url.Replace("watch?v=", "embed/");
+
+            MainBrowser.LoadHtml(string.Format(@"
 <!DOCTYPE html>
 <html>
-<body>
+  <body style=""overflow: hidden;"">
+    <iframe id=""vid"" src=""{0}"" frameborder=""0""></iframe>
 
-<div id='player'></div>
-
- <script>
-      // 2. This code loads the IFrame Player API code asynchronously.
-      var tag = document.createElement('script');
-
-      tag.src = 'https://www.youtube.com/iframe_api';
-      var firstScriptTag = document.getElementsByTagName('script')[0];
-            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-            // 3. This function creates an <iframe> (and YouTube player)
-            //    after the API code downloads.
-            var player;
-            function onYouTubeIframeAPIReady()
-            {
-                player = new YT.Player('player', {
-          height: '390',
-          width: '640',
-          videoId: 'M7lc1UVf-VE',
-          events:
-            {
-                'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-          }
-        });
-      }
-
-    // 4. The API will call this function when the video player is ready.
-    function onPlayerReady(event)
-    {
-        event.target.playVideo();
-    }
+    <script type=""text/javascript"">
+        var el = document.getElementById(""vid"");
+        el.style.width=window.innerWidth-15+'px';
+        el.style.height=window.innerHeight-15+'px';
     </script>
+  </body>
+</html>", url));
+        }
 
-</body>
-</html>
-            ");
+        class MenuHandler : IContextMenuHandler
+        {
+            void IContextMenuHandler.OnBeforeContextMenu(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, IMenuModel model) => model.Clear();
+
+            bool IContextMenuHandler.OnContextMenuCommand(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, CefMenuCommand commandId, CefEventFlags eventFlags) => false;
+
+            void IContextMenuHandler.OnContextMenuDismissed(IWebBrowser browserControl, IBrowser browser, IFrame frame) { }
+
+            bool IContextMenuHandler.RunContextMenu(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, IMenuModel model, IRunContextMenuCallback callback) => false;
         }
 
         private void urlTextbox_KeyDown(object sender, KeyEventArgs e)
@@ -224,78 +208,23 @@ namespace Floater
         private void HideUiElements()
         {
             content_pane.RowDefinitions[0].Height = new GridLength(0);
-            //content_pane.RowDefinitions[1].Height = new GridLength(0);
         }
 
         private void ShowUIElements()
         {
             content_pane.RowDefinitions[0].Height = new GridLength(32);
-            //content_pane.RowDefinitions[1].Height = new GridLength(28);
         }
 
         private void Window_Activated(object sender, EventArgs e)
         {
-            ShowUIElements();
+            if (HideUiCheckBox.IsChecked.GetValueOrDefault())
+                ShowUIElements();
         }
 
         private void Window_Deactivated(object sender, EventArgs e)
         {
-            HideUiElements();
-        }
-
-        class MenuHandler : IContextMenuHandler
-        {
-            //private const int ShowDevTools = 26501;
-            private const int GoBack = 26502;
-            private const int GoForward = 26503;
-            private const int Reload = 26504;
-
-            void IContextMenuHandler.OnBeforeContextMenu(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, IMenuModel model)
-            {
-                //To disable the menu then call clear
-                model.Clear();
-
-                //Removing existing menu item
-                //bool removed = model.Remove(CefMenuCommand.ViewSource); // Remove "View Source" option
-
-                //Add new custom menu items
-                //model.AddItem((CefMenuCommand)ShowDevTools, "Show DevTools");
-                model.AddItem((CefMenuCommand)GoBack, "Back");
-                model.AddItem((CefMenuCommand)GoForward, "Forward");
-                model.AddItem((CefMenuCommand)Reload, "Reload");
-            }
-
-            bool IContextMenuHandler.OnContextMenuCommand(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, CefMenuCommand commandId, CefEventFlags eventFlags)
-            {
-                switch ((int)commandId)
-                {
-                    //case ShowDevTools:
-                    //    browser.ShowDevTools();
-                    //    break;
-                    case GoBack:
-                        if (browser.CanGoBack)
-                            browser.GoBack();
-                        break;
-                    case GoForward:
-                        if (browser.CanGoForward)
-                            browser.GoForward();
-                        break;
-                    case Reload:
-                        browser.Reload();
-                        break;
-                }
-                return false;
-            }
-
-            void IContextMenuHandler.OnContextMenuDismissed(IWebBrowser browserControl, IBrowser browser, IFrame frame)
-            {
-
-            }
-
-            bool IContextMenuHandler.RunContextMenu(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, IMenuModel model, IRunContextMenuCallback callback)
-            {
-                return false;
-            }
+            if (HideUiCheckBox.IsChecked.GetValueOrDefault())
+                HideUiElements();
         }
 
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
@@ -309,6 +238,32 @@ namespace Floater
                 WindowState = WindowState.Maximized;
             else
                 WindowState = WindowState.Normal;
+        }
+
+        private void FloatCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            Topmost = FloatCheckBox.IsChecked.GetValueOrDefault();
+        }
+        
+        private void AboutMenuItem_Click(object sender, RoutedEventArgs e) =>
+            MessageBox.Show("Developer: Mohammed Sazid Al Rashid\nContact: sazidozon@gmail.com\nhttps://github.com/sazid/", "Floater");
+
+        private void HistoryMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: Open a new window here or show something to work with
+            // Maybe, fillup the submenus with history items
+        }
+
+        private void ScreenRecordMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ReloadMenuItem_Click(object sender, RoutedEventArgs e) => MainBrowser.Reload();
+
+        private void YoutubeModeMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            LoadYoutubeMode(MainBrowser.Address);
         }
     }
 
