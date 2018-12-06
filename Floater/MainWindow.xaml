@@ -56,30 +56,68 @@
         <!-- BEGIN: Main content -->
         <Grid Name="content_pane" DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="28px"/>
-                <ColumnDefinition Width="28px"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="150px"/>
-                <ColumnDefinition Width="48px"/>
+                <ColumnDefinition Width="84px"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="32px"/>
-                <RowDefinition Height="28px"/>
                 <RowDefinition Height="2"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <!-- First row -->
-            <Label Name="titleLabel" Content="Title of page" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Cursor="SizeAll" MouseLeftButtonDown="titleLabel_MouseLeftButtonDown" />
-            <Slider Name="opacitySlider" Grid.Row="0" Grid.Column="3" Margin="15,5" ValueChanged="opacitySlider_ValueChanged" Maximum="1.0" Minimum="0.5" Value="1.0" />
-            <Button Name="closeButton" Grid.Row="0" Grid.Column="4" BorderBrush="Red" FontWeight="Bold" Foreground="White" Background="Red" Content="X" HorizontalAlignment="Left" VerticalAlignment="Top" Width="48" Height="28" Click="closeButton_Click"/>
+            <DockPanel Grid.Row="0" Grid.Column="0" Background="{x:Null}">
+                <Button DockPanel.Dock="Left" Command="{Binding WebBrowser.BackCommand, ElementName=MainBrowser}" Content="◀" HorizontalAlignment="Right" VerticalAlignment="Top" Width="28" Height="28" BorderBrush="{x:Null}" Background="{x:Null}"/>
+                <Button DockPanel.Dock="Left" Command="{Binding WebBrowser.ForwardCommand, ElementName=MainBrowser}" Content="▶" HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                <Menu DockPanel.Dock="Left" Margin="6" Background="{x:Null}">
+                    <MenuItem Header="MENU">
+                        <MenuItem Header="MenuItem1"/>
+                    </MenuItem>
+                </Menu>
+                <!--<Label DockPanel.Dock="Left" Name="titleLabel" Padding="7" Content="Title of page" Cursor="SizeAll" />-->
+                <Label DockPanel.Dock="Left" MouseLeftButtonDown="titleLabel_MouseLeftButtonDown" Cursor="SizeAll" Content="  ---  " FontWeight="Bold" FontStretch="Expanded" HorizontalAlignment="Left" VerticalAlignment="Top" Height="28" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                <TextBox DockPanel.Dock="Left" Name="urlTextbox" TextWrapping="NoWrap" Padding="5" MaxLines="1" MinLines="1" VerticalAlignment="Top" KeyDown="urlTextbox_KeyDown" BorderBrush="{x:Null}" BorderThickness="1" Background="{x:Null}" />
+            </DockPanel>
 
-            <!-- Second row -->
-            <Button Grid.Row="1" Grid.Column="0" Name="backButton" Command="{Binding WebBrowser.BackCommand, ElementName=MainBrowser}" Content="◀" HorizontalAlignment="Right" VerticalAlignment="Top" Width="28" Height="28" BorderBrush="{x:Null}" Background="{x:Null}"/>
-            <Button Grid.Row="1" Grid.Column="1" Name="forwardButton" Command="{Binding WebBrowser.ForwardCommand, ElementName=MainBrowser}" Content="▶" HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28" Background="{x:Null}" BorderBrush="{x:Null}"/>
-            <TextBox Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" Name="urlTextbox" Height="28" TextWrapping="NoWrap" Padding="5" MaxLines="1" MinLines="1" VerticalAlignment="Top" KeyDown="urlTextbox_KeyDown" BorderBrush="{x:Null}" BorderThickness="1" Background="{x:Null}" />
+            <Slider Name="opacitySlider" Grid.Row="0" Grid.Column="1" Margin="15,5" ValueChanged="opacitySlider_ValueChanged" Maximum="1.0" Minimum="0.5" Value="1.0" />
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2">
+                <!--<Button Name="MinimizeButton" Grid.Row="0" Grid.Column="5" BorderBrush="White" FontWeight="Bold" Foreground="White" Content="_" HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28" Click="closeButton_Click" />-->
+                <!--<Button Name="MaximizeButton" Grid.Row="0" Grid.Column="6" BorderBrush="White" FontWeight="Bold" Foreground="White" Background="Red" Content="▯" HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28" Click="closeButton_Click" />-->
+                <Button Margin="5" Name="MinimizeButton" Width="18" Height="18" ToolTip="Minimize" Click="MinimizeButton_Click" Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid>
+                                <Ellipse Fill="#f7bd2d"/>
+                                <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Margin="5" Name="MaximizeButton" Width="18" Height="18" ToolTip="Maximize/Restore" Click="MaximizeButton_Click" Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid>
+                                <Ellipse Fill="#2ccd44"/>
+                                <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Margin="5" Name="closeButton" Width="18" Height="18" Click="closeButton_Click" ToolTip="Close" Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid>
+                                <Ellipse Fill="#f96058"/>
+                                <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </StackPanel>
+            
 
-            <!-- Third row -->
+                <!-- Third row -->
             <ProgressBar IsIndeterminate="{Binding IsLoading, ElementName=MainBrowser}"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Top"
@@ -90,7 +128,7 @@
                      BorderThickness="0" Background="{x:Null}" BorderBrush="Black" />
 
             <!-- Fourth row -->
-            <cefSharp:ChromiumWebBrowser Name="MainBrowser" Grid.Column="0" Address="https://google.com/" Grid.ColumnSpan="5" Grid.Row="3" />
+            <cefSharp:ChromiumWebBrowser Name="MainBrowser" Grid.Column="0" Address="https://google.com/" Grid.ColumnSpan="3" Grid.Row="2" />
         </Grid>
         <!-- END: Main content -->
     </DockPanel>

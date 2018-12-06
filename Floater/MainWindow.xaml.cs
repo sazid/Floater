@@ -123,12 +123,12 @@ namespace Floater
 
         private void MainBrowser_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
         {
-            this.Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(() =>
             {
                 try
                 {
                     urlTextbox.Text = MainBrowser.Address;
-                    titleLabel.Content = MainBrowser.Title;
+                    //titleLabel.Content = MainBrowser.Title;
 
                     //if (IsUrlYoutubeVideo(MainBrowser.Address))
                     //{
@@ -224,13 +224,13 @@ namespace Floater
         private void HideUiElements()
         {
             content_pane.RowDefinitions[0].Height = new GridLength(0);
-            content_pane.RowDefinitions[1].Height = new GridLength(0);
+            //content_pane.RowDefinitions[1].Height = new GridLength(0);
         }
 
         private void ShowUIElements()
         {
             content_pane.RowDefinitions[0].Height = new GridLength(32);
-            content_pane.RowDefinitions[1].Height = new GridLength(28);
+            //content_pane.RowDefinitions[1].Height = new GridLength(28);
         }
 
         private void Window_Activated(object sender, EventArgs e)
@@ -296,6 +296,19 @@ namespace Floater
             {
                 return false;
             }
+        }
+
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void MaximizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (WindowState == WindowState.Normal)
+                WindowState = WindowState.Maximized;
+            else
+                WindowState = WindowState.Normal;
         }
     }
 
