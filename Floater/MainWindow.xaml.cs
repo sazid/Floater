@@ -28,6 +28,8 @@ namespace Floater
             MainBrowser.LoadingStateChanged += MainBrowser_LoadingStateChanged;
             MainBrowser.MenuHandler = new MenuHandler();
             //MainBrowser.DownloadHandler = new DownloadHandler();
+
+            
         }
 
         private void InitializeCEFSettings()
@@ -217,13 +219,13 @@ namespace Floater
 
         private void Window_Activated(object sender, EventArgs e)
         {
-            if (HideUiCheckBox.IsChecked.GetValueOrDefault())
+            if (HideUiCheckBox.IsChecked)
                 ShowUIElements();
         }
 
         private void Window_Deactivated(object sender, EventArgs e)
         {
-            if (HideUiCheckBox.IsChecked.GetValueOrDefault())
+            if (HideUiCheckBox.IsChecked)
                 HideUiElements();
         }
 
@@ -242,7 +244,7 @@ namespace Floater
 
         private void FloatCheckBox_Click(object sender, RoutedEventArgs e)
         {
-            Topmost = FloatCheckBox.IsChecked.GetValueOrDefault();
+            Topmost = FloatCheckBox.IsChecked;
         }
         
         private void AboutMenuItem_Click(object sender, RoutedEventArgs e) =>
