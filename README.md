@@ -3,7 +3,7 @@ A floating web browser built with .NET and Chromium (Chromium Embed Framework) f
 
 ![Screenshot1](screenshots/1.jpg)
 ![Screenshot2](screenshots/2.png)
-![Screenshot3](screenshots/2.png)
+![Screenshot3](screenshots/3.png)
 
 ### Features
 1. Float above all other windows (perfect for watching video or chat when doing something else e.g following a tutorial)
