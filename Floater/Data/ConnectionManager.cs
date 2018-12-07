@@ -41,10 +41,8 @@ namespace sazid.github.io
                 if (connection != null && connection.State == ConnectionState.Closed)
                     connection.Open();
 
-                int rowsAffected;
-
                 sqlCommand = new SqlCommand(query, connection);
-                rowsAffected = sqlCommand.ExecuteNonQuery();
+                int rowsAffected = sqlCommand.ExecuteNonQuery();
 
                 sqlCommand.Dispose();
                 return rowsAffected;

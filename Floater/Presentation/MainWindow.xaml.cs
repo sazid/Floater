@@ -180,11 +180,11 @@ namespace Floater
             // convert url to youtube embed
             url = url.Replace("watch?v=", "embed/");
 
-            MainBrowser.LoadHtml(string.Format(@"
+            MainBrowser.LoadHtml($@"
 <!DOCTYPE html>
 <html>
   <body style=""overflow: hidden;"">
-    <iframe id=""vid"" src=""{0}"" frameborder=""0""></iframe>
+    <iframe id=""vid"" src=""{url}"" frameborder=""0""></iframe>
 
     <script type=""text/javascript"">
         var el = document.getElementById(""vid"");
@@ -192,7 +192,7 @@ namespace Floater
         el.style.height=window.innerHeight-15+'px';
     </script>
   </body>
-</html>", url));
+</html>");
         }
 
         /// <summary>
@@ -306,6 +306,16 @@ namespace Floater
         private void YoutubeModeMenuItem_Click(object sender, RoutedEventArgs e)
         {
             LoadYoutubeMode(MainBrowser.Address);
+        }
+
+        private void ProjectPageMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MainBrowser.Address = "https://github.com/sazid/Floater/";
+        }
+
+        private void PrintMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MainBrowser.Print();
         }
     }
 
