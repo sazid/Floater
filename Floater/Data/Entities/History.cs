@@ -17,7 +17,7 @@ namespace Floater.Data.Entities
         public string Url { get; set; }
         public DateTime Timestamp { get; set; }
 
-        public static List<History> GetHistories(string filter)
+        public static List<History> GetHistories(string filter = null)
         {
             List<History> histories = new List<History>();
             ConnectionManager manager = new ConnectionManager();

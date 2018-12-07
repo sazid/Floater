@@ -22,9 +22,15 @@
             <Label Grid.Column="0" Content="Search History" />
             <TextBox Name="searchHistoryTextBox" Grid.Column="1" Padding="4" TextChanged="searchHistoryTextBox_TextChanged" />
             <!--<Button Name="searchBtn" Grid.Column="1" Content="Search" Margin="1" />-->
-            <Button Name="clearHistoryBtn" Grid.Column="2" Content="Clear History" Click="clearHistoryBtn_Click" />
+            <Button Name="clearHistoryBtn" Grid.Column="2" Content="Clear History" Click="clearHistoryBtn_Click" Background="{x:Null}" />
         </Grid>
-        
-        <DataGrid x:Name="historyDataGrid" Grid.Row="1" Grid.Column="0" IsReadOnly="True" AutoGeneratingColumn="historyDataGrid_AutoGeneratingColumn" SelectionMode="Single" GridLinesVisibility="None" />
+
+        <DataGrid x:Name="historyDataGrid" Grid.Row="1" Grid.Column="0" IsReadOnly="True" AutoGeneratingColumn="historyDataGrid_AutoGeneratingColumn" SelectionMode="Single" GridLinesVisibility="None">
+            <DataGrid.ItemContainerStyle>
+                <Style TargetType="DataGridRow">
+                    <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>
+                </Style>
+            </DataGrid.ItemContainerStyle>
+        </DataGrid>
     </Grid>
 </Window>

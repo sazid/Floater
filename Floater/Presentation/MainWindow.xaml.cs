@@ -171,6 +171,10 @@ namespace Floater
             return false;
         }
 
+        /// <summary>
+        /// Loads only the YouTube player removing all kinds of distractions
+        /// </summary>
+        /// <param name="url"></param>
         private void LoadYoutubeMode(string url)
         {
             // convert url to youtube embed
@@ -191,6 +195,9 @@ namespace Floater
 </html>", url));
         }
 
+        /// <summary>
+        /// Dummy class for disabling context menu, we're doing everything through the top level menu
+        /// </summary>
         class MenuHandler : IContextMenuHandler
         {
             void IContextMenuHandler.OnBeforeContextMenu(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, IMenuModel model) => model.Clear();
@@ -272,12 +279,11 @@ namespace Floater
 
         private void HistoryMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Open a new window here or show something to work with
-            // Maybe, fillup the submenus with history items
             Hide();
             HistoryView historyView = new HistoryView
             {
-                Topmost = Topmost
+                Topmost = Topmost,
+                mainWindow = this
             };
             historyView.ShowDialog();
             Show();

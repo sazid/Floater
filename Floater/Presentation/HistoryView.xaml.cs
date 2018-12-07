@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Floater.Data.Entities;
 using Floater.Utils;
 
@@ -14,6 +15,7 @@ namespace Floater
     public partial class HistoryView : Window
     {
         private DebounceDispatcher debounceDispatcher = new DebounceDispatcher();
+        public MainWindow mainWindow;
 
         public HistoryView()
         {
@@ -55,6 +57,16 @@ namespace Floater
                 History.DeleteHistory();
                 LoadHistory();
                 searchHistoryTextBox.Text = string.Empty;
+            }
+        }
+
+        private void Row_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (mainWindow != null && historyDataGrid.SelectedItem is History h)
+            {
+                mainWindow.MainBrowser.Address = h.Url;
+                mainWindow.Show();
+                Close();
             }
         }
     }

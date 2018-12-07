@@ -12,7 +12,7 @@
         Background="White"
         BorderBrush="SlateGray"
         BorderThickness="2"
-        Title="Floater" Height="500" Width="800" Activated="Window_Activated" Deactivated="Window_Deactivated">
+        Title="Floater" Height="768" Width="1024" Activated="Window_Activated" Deactivated="Window_Deactivated">
 
     <Window.Resources>
         <Style x:Key="RectBorderStyle" TargetType="Rectangle">
