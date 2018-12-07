@@ -19,3 +19,4 @@ Mohammed Sazid Al Rashid
 
 ### License
 [MIT License](LICENSE)
+This project uses the open source [Captura](https://github.com/MathewSachin/Captura) screen recording software. Check out the project for its own license.
