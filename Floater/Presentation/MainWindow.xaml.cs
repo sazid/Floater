@@ -1,7 +1,8 @@
 ﻿/**
  * Floater: A minimalistic floating web browser with cool superpowers :p
- * Copyright (c) Mohammed Sazid Al Rashid
- * https://github.com/sazid/
+ * Developer: Mohammed Sazid Al Rashid
+ * LICENSE: MIT | See the LICENSE file for more information
+ * https://github.com/sazid/Floater/
  * https://linkedin.com/in/sazidz/
  */
 
@@ -12,6 +13,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Shapes;
+using Floater.Data.Entities;
+using Floater.Utils;
 
 namespace Floater
 {
@@ -20,6 +23,8 @@ namespace Floater
     /// </summary>
     public partial class MainWindow : Window
     {
+        private DebounceDispatcher debounceDispatcher = new DebounceDispatcher();
+
         public MainWindow()
         {
             InitializeCEFSettings();
@@ -28,8 +33,6 @@ namespace Floater
             MainBrowser.LoadingStateChanged += MainBrowser_LoadingStateChanged;
             MainBrowser.MenuHandler = new MenuHandler();
             //MainBrowser.DownloadHandler = new DownloadHandler();
-
-            
         }
 
         private void InitializeCEFSettings()
@@ -130,6 +133,23 @@ namespace Floater
                 {
                     urlTextbox.Text = MainBrowser.Address;
                     //titleLabel.Content = MainBrowser.Title;
+
+                    if (MainBrowser == null) ;
+                    else if (MainBrowser.Title == string.Empty) ;
+                    else if (MainBrowser.Address.StartsWith("data")) ;
+                    else
+                    {
+                        // debounce creation of history for 2s, so that it doesn't log history for unnecessary redirects
+                        debounceDispatcher.Debounce(2000, _ =>
+                        {
+                            History.CreateHistory(new History
+                            {
+                                Url = MainBrowser.Address,
+                                Title = MainBrowser.Title,
+                                Timestamp = DateTime.Now
+                            });
+                        });
+                    }
 
                     if (IsUrlYoutubeVideo(MainBrowser.Address))
                         YoutubeModeMenuItem.IsEnabled = true;
@@ -244,7 +264,7 @@ namespace Floater
 
         private void FloatCheckBox_Click(object sender, RoutedEventArgs e)
         {
-            Topmost = FloatCheckBox.IsChecked.GetValueOrDefault();
+            Topmost = FloatCheckBox.IsChecked;
         }
         
         private void AboutMenuItem_Click(object sender, RoutedEventArgs e) =>
@@ -254,6 +274,13 @@ namespace Floater
         {
             // TODO: Open a new window here or show something to work with
             // Maybe, fillup the submenus with history items
+            Hide();
+            HistoryView historyView = new HistoryView
+            {
+                Topmost = Topmost
+            };
+            historyView.ShowDialog();
+            Show();
         }
 
         private void ScreenRecordMenuItem_Click(object sender, RoutedEventArgs e)

@@ -73,7 +73,7 @@
                 <Menu DockPanel.Dock="Left" Margin="6" Background="{x:Null}">
                     <MenuItem Header="_MENU">
                         <MenuItem Name="FloatCheckBox" Header="_FLoat above other Windows" IsCheckable="true"  IsChecked="True" Click="FloatCheckBox_Click" />
-                        <MenuItem Name="HideUiCheckBox" Header="_Hide UI on Lost Focus" IsCheckable="true"  IsChecked="False" />
+                        <MenuItem Name="HideUiCheckBox" Header="Hide _UI on Lost Focus" IsCheckable="true"  IsChecked="False" />
                         <Separator />
                         <MenuItem Name="YoutubeModeMenuItem" Header="_YouTube video mode" Click="YoutubeModeMenuItem_Click"/>
                         <MenuItem Name="ScreenRecordMenuItem" Header="_Screen Record" Click="ScreenRecordMenuItem_Click"/>
