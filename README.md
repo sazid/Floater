@@ -11,5 +11,11 @@ A floating web browser built with .NET and Chromium (Chromium Embed Framework) f
 3. Hide UI elements & dedicated YouTube(r) video mode to watch videos without distraction
 4. Clean and Minimal UI
 
+### Developer
+Mohammed Sazid Al Rashid
+[LinkedIn][https://linkedin.com/in/sazidz]
+[GitHub][https://github.com/sazid]
+[Stackoverflow][https://stackoverflow.com/users/1941132/sazid]
+
 ### License
 [MIT License](LICENSE)
