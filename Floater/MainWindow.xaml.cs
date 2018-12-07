@@ -244,7 +244,7 @@ namespace Floater
 
         private void FloatCheckBox_Click(object sender, RoutedEventArgs e)
         {
-            Topmost = FloatCheckBox.IsChecked;
+            Topmost = FloatCheckBox.IsChecked.GetValueOrDefault();
         }
         
         private void AboutMenuItem_Click(object sender, RoutedEventArgs e) =>
