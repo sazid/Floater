@@ -9,6 +9,7 @@
 using CefSharp;
 using CefSharp.Wpf;
 using System;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -81,9 +82,7 @@ namespace Floater
         {
             if (ResizeInProcess)
             {
-                Rectangle senderRect = sender as Rectangle;
-                Window mainWindow = senderRect.Tag as Window;
-                if (senderRect != null)
+                if (sender is Rectangle senderRect && senderRect.Tag is Window mainWindow)
                 {
                     double width = e.GetPosition(mainWindow).X;
                     double height = e.GetPosition(mainWindow).Y;
@@ -159,7 +158,7 @@ namespace Floater
                 }
                 catch (Exception exc)
                 {
-                    MessageBox.Show(exc.ToString());
+                    //MessageBox.Show(exc.ToString());
                 }
             });
             
@@ -167,9 +166,7 @@ namespace Floater
 
         private bool IsUrlYoutubeVideo(string url)
         {
-            if (url.StartsWith("https://www.youtube.com/watch?v="))
-                return true;
-            return false;
+            return url.StartsWith("https://www.youtube.com/watch?v=");
         }
 
         /// <summary>
@@ -210,21 +207,33 @@ namespace Floater
             bool IContextMenuHandler.RunContextMenu(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, IMenuModel model, IRunContextMenuCallback callback) => false;
         }
 
+        private static bool ValidHttpUrl(string s, out Uri resultUri)
+        {
+            if (!Regex.IsMatch(s, @"^https?:\/\/.+\..+", RegexOptions.IgnoreCase))
+                if (Regex.IsMatch(s, @".+\...+"))
+                    s = "http://" + s;
+
+            if (Uri.TryCreate(s, UriKind.Absolute, out resultUri))
+                return (resultUri.Scheme == Uri.UriSchemeHttp ||
+                        resultUri.Scheme == Uri.UriSchemeHttps);
+
+            return false;
+        }
+
         private void urlTextbox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return)
             {
                 MainBrowser.Stop();
 
-                bool result = Uri.TryCreate(urlTextbox.Text, UriKind.Absolute, out Uri uriResult)
-                              && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+                var result = ValidHttpUrl(urlTextbox.Text, out var uriResult);
                 if (!result)
                 {
                     MainBrowser.Address = "https://google.com/search?q=" + urlTextbox.Text;
                 }
                 else
                 {
-                    MainBrowser.Address = urlTextbox.Text;
+                    MainBrowser.Address = uriResult?.AbsoluteUri;
                 }
 
                 MainBrowser.Focus();
