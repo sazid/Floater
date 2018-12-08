@@ -132,7 +132,8 @@ namespace Floater
                 try
                 {
                     urlTextbox.Text = MainBrowser.Address;
-                    //titleLabel.Content = MainBrowser.Title;
+                    titleLabel.Content = MainBrowser.Title;
+                    titleLabel.ToolTip = MainBrowser.Title;
 
                     if (MainBrowser == null) ;
                     else if (MainBrowser.Title == string.Empty) ;
@@ -213,7 +214,20 @@ namespace Floater
         {
             if (e.Key == Key.Return)
             {
-                MainBrowser.Address = urlTextbox.Text;
+                MainBrowser.Stop();
+
+                bool result = Uri.TryCreate(urlTextbox.Text, UriKind.Absolute, out Uri uriResult)
+                              && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+                if (!result)
+                {
+                    MainBrowser.Address = "https://google.com/search?q=" + urlTextbox.Text;
+                }
+                else
+                {
+                    MainBrowser.Address = urlTextbox.Text;
+                }
+
+                MainBrowser.Focus();
             }
         }
 
@@ -224,7 +238,7 @@ namespace Floater
 
         private void titleLabel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            var move = content_pane as Grid;
+            var move = content_pane;
             var win = GetWindow(move);
             win.DragMove();
         }

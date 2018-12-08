@@ -86,9 +86,8 @@
                         <MenuItem Name="ProjectPageMenuItem" Header="Proj_ect Page" Click="ProjectPageMenuItem_Click" />
                     </MenuItem>
                 </Menu>
-                <!--<Label DockPanel.Dock="Left" Name="titleLabel" Padding="7" Content="Title of page" Cursor="SizeAll" />-->
-                <Label DockPanel.Dock="Left" MouseLeftButtonDown="titleLabel_MouseLeftButtonDown" Cursor="SizeAll" Content="  ---  " FontWeight="Bold" FontStretch="Expanded" HorizontalAlignment="Left" VerticalAlignment="Top" Height="28" Background="{x:Null}" BorderBrush="{x:Null}"/>
-                <TextBox DockPanel.Dock="Left" Name="urlTextbox" TextWrapping="NoWrap" Padding="5" MaxLines="1" MinLines="1" VerticalAlignment="Top" KeyDown="urlTextbox_KeyDown" BorderBrush="{x:Null}" BorderThickness="1" Background="{x:Null}" />
+                <Label Name="titleLabel" FontSize="12" Padding="6" MinWidth="50" MaxWidth="200" DockPanel.Dock="Left" MouseLeftButtonDown="titleLabel_MouseLeftButtonDown" Cursor="SizeAll" Content="---------" FontWeight="SemiBold" Height="28" BorderBrush="{x:Null}" Background="#FFF0F0F0" TextOptions.TextFormattingMode="Display"/>
+                <TextBox DockPanel.Dock="Left" Name="urlTextbox" TextWrapping="NoWrap" Padding="7" MaxLines="1" MinLines="1" VerticalAlignment="Top" KeyDown="urlTextbox_KeyDown" BorderBrush="{x:Null}" Height="32" BorderThickness="1" Background="{x:Null}" TextOptions.TextFormattingMode="Display" />
             </DockPanel>
 
             <Slider Name="opacitySlider" Grid.Row="0" Grid.Column="1" Margin="15,5" ValueChanged="opacitySlider_ValueChanged" Maximum="1.0" Minimum="0.5" Value="1.0" />
@@ -126,7 +125,7 @@
                     </Button.Template>
                 </Button>
             </StackPanel>
-            
+
             <!-- Second row -->
             <ProgressBar IsIndeterminate="{Binding IsLoading, ElementName=MainBrowser}"
                      HorizontalAlignment="Stretch"
