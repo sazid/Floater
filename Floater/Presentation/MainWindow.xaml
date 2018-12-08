@@ -68,8 +68,8 @@
 
             <!-- First row -->
             <DockPanel Grid.Row="0" Grid.Column="0" Background="{x:Null}">
-                <Button DockPanel.Dock="Left" Command="{Binding WebBrowser.BackCommand, ElementName=MainBrowser}" Content="◀" HorizontalAlignment="Right" VerticalAlignment="Top" Width="28" Height="28" BorderBrush="{x:Null}" Background="{x:Null}"/>
-                <Button DockPanel.Dock="Left" Command="{Binding WebBrowser.ForwardCommand, ElementName=MainBrowser}" Content="▶" HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                <Button DockPanel.Dock="Left" Command="{Binding WebBrowser.BackCommand, ElementName=MainBrowser}" ToolTip="Ctrl + B" Content="◀" HorizontalAlignment="Right" VerticalAlignment="Top" Width="28" Height="28" BorderBrush="{x:Null}" Background="{x:Null}"/>
+                <Button DockPanel.Dock="Left" Command="{Binding WebBrowser.ForwardCommand, ElementName=MainBrowser}" ToolTip="Ctrl + F" Content="▶" HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28" Background="{x:Null}" BorderBrush="{x:Null}"/>
                 <Menu DockPanel.Dock="Left" Margin="6" Background="{x:Null}">
                     <MenuItem Header="_MENU">
                         <MenuItem Name="FloatCheckBox" Header="_FLoat above other Windows" IsCheckable="true"  IsChecked="True" Click="FloatCheckBox_Click" />

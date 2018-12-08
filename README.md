@@ -6,13 +6,22 @@ A floating web browser built with .NET and Chromium (Chromium Embed Framework) f
 ![Screenshot3](screenshots/3.png)
 
 ### Download
-
+[Floater Releases](https://github.com/sazid/Floater/releases)
 
 ### Features
 1. Float above all other windows (perfect for watching video or chat when doing something else e.g following a tutorial)
 2. Transparent Window
 3. Hide UI elements & dedicated YouTube(r) video mode to watch videos without distraction
 4. Clean and Minimal UI
+
+### Keyboard Shortcuts
+* `Ctrl-B` - Go back
+* `Ctrl-F` - Go forward
+* `Ctrl-H` - Show history
+* `Ctrl-R` - Reload
+* `Ctrl-L` - Focus address bar
+* `Ctrl-P` - Print
+* `ESC` - Move focus from address bar to browser
 
 ### Developer
 Mohammed Sazid Al Rashid

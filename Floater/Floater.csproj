@@ -137,6 +137,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Utils\WindowCommand.cs" />
     <Compile Include="Utils\DebounceDispatcher.cs" />
     <Page Include="Presentation\HistoryView.xaml">
       <SubType>Designer</SubType>

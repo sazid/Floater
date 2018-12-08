@@ -34,6 +34,48 @@ namespace Floater
             MainBrowser.LoadingStateChanged += MainBrowser_LoadingStateChanged;
             MainBrowser.MenuHandler = new MenuHandler();
             //MainBrowser.DownloadHandler = new DownloadHandler();
+
+            BindShortcutKeys();
+        }
+
+        private void BindShortcutKeys()
+        {
+            // Bind the Ctrl-L to focus on the url bar
+            InputBindings.Add(new KeyBinding(
+                new WindowCommand()
+                {
+                    ExecuteDelegate = Shortcut_Ctrl_L
+                }, new KeyGesture(Key.L, ModifierKeys.Control)));
+
+            InputBindings.Add(new KeyBinding(
+                new WindowCommand()
+                {
+                    ExecuteDelegate = Shortcut_Ctrl_R
+                }, new KeyGesture(Key.R, ModifierKeys.Control)));
+
+            InputBindings.Add(new KeyBinding(
+                new WindowCommand()
+                {
+                    ExecuteDelegate = Shortcut_Ctrl_P
+                }, new KeyGesture(Key.P, ModifierKeys.Control)));
+
+            InputBindings.Add(new KeyBinding(
+                new WindowCommand()
+                {
+                    ExecuteDelegate = Shortcut_Ctrl_B
+                }, new KeyGesture(Key.B, ModifierKeys.Control)));
+
+            InputBindings.Add(new KeyBinding(
+                new WindowCommand()
+                {
+                    ExecuteDelegate = Shortcut_Ctrl_F
+                }, new KeyGesture(Key.F, ModifierKeys.Control)));
+
+            InputBindings.Add(new KeyBinding(
+                new WindowCommand()
+                {
+                    ExecuteDelegate = ShowHistory
+                }, new KeyGesture(Key.H, ModifierKeys.Control)));
         }
 
         private void InitializeCEFSettings()
@@ -134,9 +176,9 @@ namespace Floater
                     titleLabel.Content = MainBrowser.Title;
                     titleLabel.ToolTip = MainBrowser.Title;
 
-                    if (MainBrowser == null) ;
-                    else if (MainBrowser.Title == string.Empty) ;
-                    else if (MainBrowser.Address.StartsWith("data")) ;
+                    if (MainBrowser == null) { }
+                    else if (MainBrowser.Title == string.Empty) { }
+                    else if (MainBrowser.Address.StartsWith("data")) { }
                     else
                     {
                         // debounce creation of history for 2s, so that it doesn't log history for unnecessary redirects
@@ -207,10 +249,18 @@ namespace Floater
             bool IContextMenuHandler.RunContextMenu(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, IMenuModel model, IRunContextMenuCallback callback) => false;
         }
 
+        /// <summary>
+        /// Use regular expression to validate a given string as url.
+        /// It also tries to convert the given string into a valid http url for cases like: google.com which doesn't include http://
+        /// at the start
+        /// </summary>
+        /// <param name="s">string to validate</param>
+        /// <param name="resultUri">(Possibly converted) Uri if successful</param>
+        /// <returns></returns>
         private static bool ValidHttpUrl(string s, out Uri resultUri)
         {
             if (!Regex.IsMatch(s, @"^https?:\/\/.+\..+", RegexOptions.IgnoreCase))
-                if (Regex.IsMatch(s, @".+\...+"))
+                if (Regex.IsMatch(s, @".+\...+", RegexOptions.IgnoreCase))
                     s = "http://" + s;
 
             if (Uri.TryCreate(s, UriKind.Absolute, out resultUri))
@@ -222,21 +272,29 @@ namespace Floater
 
         private void urlTextbox_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Return)
+            // ReSharper disable once SwitchStatementMissingSomeCases
+            switch (e.Key)
             {
-                MainBrowser.Stop();
-
-                var result = ValidHttpUrl(urlTextbox.Text, out var uriResult);
-                if (!result)
+                case Key.Return:
                 {
-                    MainBrowser.Address = "https://google.com/search?q=" + urlTextbox.Text;
-                }
-                else
-                {
-                    MainBrowser.Address = uriResult?.AbsoluteUri;
-                }
+                    MainBrowser.Stop();
 
-                MainBrowser.Focus();
+                    var result = ValidHttpUrl(urlTextbox.Text, out var uriResult);
+                    if (!result)
+                    {
+                        MainBrowser.Address = "https://google.com/search?q=" + urlTextbox.Text;
+                    }
+                    else
+                    {
+                        MainBrowser.Address = uriResult?.AbsoluteUri;
+                    }
+
+                    MainBrowser.Focus();
+                    break;
+                }
+                case Key.Escape:
+                    MainBrowser.Focus();
+                    break;
             }
         }
 
@@ -302,6 +360,11 @@ namespace Floater
 
         private void HistoryMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            ShowHistory();
+        }
+
+        private void ShowHistory()
+        {
             Hide();
             HistoryView historyView = new HistoryView
             {
@@ -339,6 +402,34 @@ namespace Floater
         private void PrintMenuItem_Click(object sender, RoutedEventArgs e)
         {
             MainBrowser.Print();
+        }
+
+        private void Shortcut_Ctrl_L()
+        {
+            urlTextbox.Focus();
+            urlTextbox.Select(0, urlTextbox.Text.Length);
+        }
+
+        private void Shortcut_Ctrl_R()
+        {
+            MainBrowser.Reload();
+        }
+
+        private void Shortcut_Ctrl_P()
+        {
+            MainBrowser.Print();
+        }
+
+        private void Shortcut_Ctrl_B()
+        {
+            if (MainBrowser.CanGoBack)
+                MainBrowser.Back();
+        }
+
+        private void Shortcut_Ctrl_F()
+        {
+            if (MainBrowser.CanGoForward)
+                MainBrowser.Forward();
         }
     }
 
