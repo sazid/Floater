@@ -15,6 +15,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Shapes;
 using Floater.Data.Entities;
+using Floater.Presentation;
 using Floater.Utils;
 
 namespace Floater
@@ -38,6 +39,9 @@ namespace Floater
             BindShortcutKeys();
         }
 
+        /// <summary>
+        /// This method binds the shortcut keys to the Window
+        /// </summary>
         private void BindShortcutKeys()
         {
             // Bind the Ctrl-L to focus on the url bar
@@ -78,6 +82,9 @@ namespace Floater
                 }, new KeyGesture(Key.H, ModifierKeys.Control)));
         }
 
+        /// <summary>
+        /// Initialize the Chromium Embed Framework and enable/disable various important command line flags
+        /// </summary>
         private void InitializeCEFSettings()
         {
             CefSettings settings = new CefSettings
