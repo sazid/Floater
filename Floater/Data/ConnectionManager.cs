@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data;
+using System.Windows;
 
 /**
  * Author: Mohammed Sazid Al Rashid
@@ -14,13 +15,14 @@ namespace sazid.github.io
 {
     public class ConnectionManager
     {
-        public string ConnectionString { get; set; }
-        private SqlConnection connection;
-        private SqlCommand sqlCommand;
+        private string ConnectionString { get; }
+        private SqlConnection _connection;
+        private SqlCommand _sqlCommand;
 
         public ConnectionManager()
         {
-            ConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Sazid\source\repos\Floater\Floater\floaterdb.mdf;Integrated Security=True;Connect Timeout=30";
+            // the database file will always be served within the application folder
+            ConnectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={Environment.CurrentDirectory}\floaterdb.mdf;Integrated Security=True;Connect Timeout=30";
         }
 
         public ConnectionManager(string connectionString)
@@ -30,38 +32,38 @@ namespace sazid.github.io
 
         ~ConnectionManager()
         {
-            if (connection?.State == ConnectionState.Open)
-                connection?.Close();
+            if (_connection?.State == ConnectionState.Open)
+                _connection?.Close();
         }
 
         public int NonQuery(string query)
         {
-            using (connection = new SqlConnection(ConnectionString))
+            using (_connection = new SqlConnection(ConnectionString))
             {
-                if (connection != null && connection.State == ConnectionState.Closed)
-                    connection.Open();
+                if (_connection != null && _connection.State == ConnectionState.Closed)
+                    _connection.Open();
 
-                sqlCommand = new SqlCommand(query, connection);
-                int rowsAffected = sqlCommand.ExecuteNonQuery();
+                _sqlCommand = new SqlCommand(query, _connection);
+                int rowsAffected = _sqlCommand.ExecuteNonQuery();
 
-                sqlCommand.Dispose();
+                _sqlCommand.Dispose();
                 return rowsAffected;
             }
         }
 
         public DataTable Query(string query)
         {
-            using (connection = new SqlConnection(ConnectionString))
+            using (_connection = new SqlConnection(ConnectionString))
             {
-                if (connection.State == ConnectionState.Closed)
-                    connection.Open();
+                if (_connection.State == ConnectionState.Closed)
+                    _connection.Open();
 
-                sqlCommand = new SqlCommand(query, connection);
-                SqlDataAdapter da = new SqlDataAdapter(sqlCommand);
+                _sqlCommand = new SqlCommand(query, _connection);
+                SqlDataAdapter da = new SqlDataAdapter(_sqlCommand);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
 
-                sqlCommand.Dispose();
+                _sqlCommand.Dispose();
                 return dt;
             }
         }
@@ -69,7 +71,7 @@ namespace sazid.github.io
         public static string Escape(string q) => q.Replace("'", "").Replace("%", "").Replace("\"\"", "");
 
         /**
-         * This method builds a query and replaces "escapes" all single quotes so that SQL injection is not possible
+         * This method builds a query and "escapes" all single quotes so that SQL injection is not possible
          */
         /*
         public DataTable QueryTable(string tableName, string[] columnNames = null, string[] whereColumns = null, string[] whereValues = null)
