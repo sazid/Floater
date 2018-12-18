@@ -29,6 +29,7 @@ A floating web browser built with .NET and Chromium (Chromium Embed Framework) f
 
 ### Developer
 Mohammed Sazid Al Rashid
+* [Developer Story](https://stackoverflow.com/story/sazid4199)
 * [LinkedIn](https://linkedin.com/in/sazidz)
 * [GitHub](https://github.com/sazid)
 * [Stackoverflow](https://stackoverflow.com/users/1941132/sazid)
