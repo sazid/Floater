@@ -4,6 +4,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Floater.Data.Entities;
 using Floater.Utils;
+using System.Threading;
+using System.Collections.Generic;
 
 namespace Floater.Presentation
 {
@@ -14,20 +16,29 @@ namespace Floater.Presentation
     {
         private DebounceDispatcher debounceDispatcher = new DebounceDispatcher();
         public MainWindow mainWindow;
+        private readonly SynchronizationContext synchronizationContext;
 
         public HistoryView()
         {
             InitializeComponent();
+            synchronizationContext = SynchronizationContext.Current;
         }
 
         private void Window_Initialized(object sender, EventArgs e)
         {
-            LoadHistory();
+            new Thread(_ =>
+            {
+                Thread.CurrentThread.IsBackground = true;
+                LoadHistory();
+            }).Start();
         }
 
         private void LoadHistory(string filter = null)
         {
-            HistoryDataGrid.ItemsSource = History.GetHistories(filter);
+            List<History> data = History.GetHistories(filter);
+
+            HistoryDataGrid.Dispatcher.Invoke(
+                new Action(() => HistoryDataGrid.ItemsSource = data));
         }
 
         private void HistoryDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
